@@ -1,0 +1,70 @@
+name: Step 0 # Start Course
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
+
+jobs:
+  start_course:
+    name: Start Course
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+            ref: main
+            fetch-depth: 0
+
+      - name: Configure Git user
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
+      - name: Activate 'Start Lesson' button
+        run: |
+          # Add link to pull request
+          target='id="start_lesson"'
+          replacement='id="start_lesson" href="../../pull/1"'
+          sed -i "s|$target|$replacement|g" README.md
+
+          # Change color from gray to green
+          target=Start_Lesson-AAA
+          replacement=Start_Lesson-008000
+          sed -i "s|$target|$replacement|g" README.md
+
+      - name: Replace relative links in readme
+        run: |
+          target=../../
+          replacement=https://github.com/${{ github.repository }}/
+          sed -i "s|$target|$replacement|g" README.md
+
+      - name: Push README changes
+        run: |
+          git add README.md
+          git commit --message="Start course"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create branch for learning path
+        run: |
+          git checkout -b learning-path
+          git commit --allow-empty -m "Start course"
+          git push origin learning-path
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create pull request
+        run: |
+          gh pr create --base main --head learning-path \
+          --title "Introduction to GitHub" \
+          --body "Welcome to the course! As you complete each step, our bot will post comments to unlock the next one. Good luck!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

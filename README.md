@@ -1,10 +1,10 @@
 # Introduction to GitHub
 
-![](../../actions/workflows/0-welcome.yml/badge.svg?branch=main)
+![](../../actions/workflows/0-start-course.yml/badge.svg?branch=main)
 ![](../../actions/workflows/1-create-a-branch.yml/badge.svg?branch=my-first-branch)
 ![](../../actions/workflows/2-commit-a-file.yml/badge.svg?branch=my-first-branch)
 ![](../../actions/workflows/3-open-a-pull-request.yml/badge.svg?branch=my-first-branch)
-![](../../../actions/workflows/4-merge-your-pull-request.yml/badge.svg?branch=my-first-branch)
+![](../../actions/workflows/4-merge-your-pull-request.yml/badge.svg?branch=my-first-branch)
 
 _Get started using GitHub in less than an hour._
 
@@ -27,21 +27,24 @@ In this course, you will:
 
 ### How to start this course
 
-1. Right-click **Clone Course** and open the link in a new tab.
+1. Right-click **Copy Course** and open the link in a new tab.
    
-   <!-- [![Start Course](https://user-images.githubusercontent.com/1221423/235727646-4a590299-ffe5-480d-8cd5-8194ea184546.svg)](https://github.com/new?template_owner=skills&template_name=introduction-to-github&owner=%40me&name=skills-introduction-to-github&description=My+clone+repository&visibility=public) -->
-   <a href="" style="color:white; background-color:green; padding:0.3em 0.5em; border-radius: 0.25em;">Copy Course</a>
+   <a href="https://github.com/new?template_owner=skills&template_name=introduction-to-github&owner=%40me&name=skills-introduction-to-github&description=My+clone+repository&visibility=public">
+      <img src="https://img.shields.io/badge/📠_Copy_Course-008000" height="25pt"/>
+   </a>
 
 2. In the new tab, most of the prompts will automatically fill in for you.
    - For owner, choose your personal account or an organization to host the repository.
    - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
    - Scroll down and click the **Create repository** button at the bottom of the form.
-3. After your new repository is created, click **Start Lesson**. Follow the step-by-step instructions and feedback will provided as you progress
+3. After your new repository is created, click **Start Lesson**. Follow the step-by-step instructions and feedback will be provided as you progress.
 
-   <a href="" style="color:white; background-color:green; padding:0.4em 0.5em; border-radius: 0.25em;">Start Lesson</a>
+   <a id="start_lesson">
+      <img src="https://img.shields.io/badge/🚀_Start_Lesson-AAA" height="25pt"/>
+   </a>
 
 > [!IMPORTANT]
-> If the **Start Lesson** button does not work, wait a moment and try again. A workflow is still preparing it.
+> The **Start Lesson** button will activate after copying the course.
 
 ---
 
