@@ -21,8 +21,8 @@ permissions:
   pull-requests: write
 
 jobs:
-  check_step_3:
-    name: Check step 3
+  check_step_3_work:
+    name: Check step 3 work
     runs-on: ubuntu-latest
     if: |
       !github.event.repository.is_template &&
@@ -32,7 +32,7 @@ jobs:
       - name: Congratulate first PR
         run: |
           message="You've created your first pull request. Nice work! ✨🎉 Now, let's check the title and description."
-          gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }} --edit-last
+          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }} --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
@@ -52,7 +52,7 @@ jobs:
           # If messsage is not empty post feedback
           if [ ! -z "$message" ]; then
             message="Please check:$message"
-            gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }} --edit-last
+            gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }} --edit-last
             exit 1
           fi
         env:
@@ -61,7 +61,7 @@ jobs:
       - name: Mark lesson finished
         run: |
           message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 4! Almost done!"
-          gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }}
+          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
