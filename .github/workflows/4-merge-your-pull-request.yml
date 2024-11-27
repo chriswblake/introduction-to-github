@@ -91,7 +91,7 @@ jobs:
           If you would like to practice the steps again, you can retrace your steps below.  
           We won't grade you this time. 😉
           "
-          echo "$message \n $orig_readme" > README.md
+          echo "$message $orig_readme" > README.md
           git add README.md
           git commit --message="Congratulations!🎉"
           git push
