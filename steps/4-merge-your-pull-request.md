@@ -18,10 +18,7 @@ As noted in the previous step, you may have seen evidence of GitHub Actions runn
 
    ![screenshot showing delete branch button](steps/images/4-delete-branch.png)
 
-4. Upon merging the pull request, a [GitHub Action Workflow](https://docs.github.com/en/actions) was triggered to check this lesson.
-If it passes, the below badge will say "passed" and turn green. After that, you can continue confidently.<br/>
-
-5. Wait a moment for the bot to check your work. You will see a comment with progress info and the next lesson.
+4. Wait a moment for the bot to check your work. You will see a comment with progress info and the next lesson.
 
 > [!TIP]
 > Check out the repository home page to see your completion badge! 🎉
