@@ -1,0 +1,115 @@
+name: Step 3 # Open a pull request
+
+# Checks if the learner completed tasks for step 3.
+# - Triggers when the user creates or edits the pull request.
+# - Checks the pull request title and description. Adds a PR comment.
+# - If all checks pass, the workflow is disabled so it doesn't run again. As such, workflow status badge will change to green.
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: 
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+permissions:
+  contents: read
+  actions: write
+  pull-requests: write
+
+jobs:
+  check_step_3:
+    name: Check step 3
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template &&
+      github.head_ref == 'my-first-branch'
+
+    steps:
+      - name: Congratulate first PR
+        run: |
+          message="You've created your first pull request. Nice work! ✨🎉 Now, let's check the title and description."
+          gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }} --edit-last
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Check pull request
+        run: |
+          message=""
+          # Check if the pull request title is correct
+          if [ "${{ github.event.pull_request.title }}" != "Add my first file" ]; then
+            message+="\n- Incorrect pull request title."
+          fi
+
+          # Check if a pull request description exists
+          if [ "${{ github.event.pull_request.body }}" == "" ]; then
+            message+="\n- Empty pull request description."
+          fi
+
+          # If messsage is not empty post feedback
+          if [ ! -z "$message" ]; then
+            message="Please check:$message"
+            gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }} --edit-last
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              
+      - name: Mark lesson finished
+        run: |
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 4! Almost done!"
+          gh pr comment ${{ github.head_ref}} --body "$message" --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable workflow so it doesn't run again
+        run: gh workflow disable "${{github.workflow}}" --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  post_step_4_content:
+    name: Post step 4 content
+    needs: check_step_3_work
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Add pull request comment with step 4 content
+        run: |
+          # Load step 4 content
+          next_step_content=$(cat steps/4-merge-your-pull-request.md)
+          
+          # Update image links to be absolute
+          target='steps/'
+          replacement='https://github.com/${{ github.repository }}/blob/main/steps/'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Append "?raw=true" to image links
+          target='.png'
+          replacement='.png?raw=true'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Add content to pull request
+          gh pr comment 'learning-path'  --body "$next_step_content"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Inform user about review
+        run: |
+          message="Waiting to check your work. 🤓"
+          gh pr comment 'learning-path' --body "$message"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable workflow to prevent running again
+        run: gh workflow disable "${{github.workflow}}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
