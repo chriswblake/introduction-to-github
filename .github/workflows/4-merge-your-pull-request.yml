@@ -19,41 +19,19 @@ permissions:
 jobs:
   check_step_4_work:
     name: Check step 4 work
+    runs-on: ubuntu-latest
     if: |
       !github.event.repository.is_template &&
       github.head_ref == 'my-first-branch' &&
       github.event.pull_request.merged == true
 
-    runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-      
-      - name: Configure Git user
+      - name: Mark lesson finished
         run: |
-          git config user.name github-actions[bot]
-          git config user.email github-actions[bot]@users.noreply.github.com
-
-      - name: Add "Congratulations" to README.md
-        run: |
-          # Load existing README
-          orig_readme=$(cat README.md)
-
-          message="⭐️ Congratulations! You've completed this lesson! ⭐️  
-          If you would like to practice the steps again, you can retrace your steps below.  
-          We won't grade you this time. 😉
-          "
-          echo "$message \n $orig_readme" > README.md
-          git add README.md
-          git commit --message="Congratulations!🎉"
-          git push
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Now, let's do a quick review!"
+          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   post_review_content:
     name: Post review content
@@ -87,6 +65,39 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  finish_course:
+    name: Finish course
+    needs: post_review_content
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      
+      - name: Configure Git user
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+
+      - name: Add "Congratulations" to README.md
+        run: |
+          # Load existing README
+          orig_readme=$(cat README.md)
+
+          message="⭐️ Congratulations! You've completed this lesson! ⭐️  
+          If you would like to practice the steps again, you can retrace your steps below.  
+          We won't grade you this time. 😉
+          "
+          echo "$message \n $orig_readme" > README.md
+          git add README.md
+          git commit --message="Congratulations!🎉"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Final message
         run: |
           message="Return to the [repository home](https://github.com/${{ github.repository }}) page to see your progress!"
