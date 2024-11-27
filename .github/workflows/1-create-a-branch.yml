@@ -30,24 +30,24 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Inform user about review
+      - name: Inform user review has started
         run: |
           message="Looks like you are making progress. Checking your work... 🧐"
-          gh pr comment 'learning-path' --body "$message"
+          gh pr comment 'learning-path' --body "$message" --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Success message
         run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉"
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 2!"
           echo "$message"
           gh pr comment 'learning-path' --body "$message" --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
   post_step_2_content:
-    needs: check_step_1_work
     name: Post step 2 content
+    needs: check_step_1_work
     runs-on: ubuntu-latest
     
     steps:
@@ -74,6 +74,13 @@ jobs:
           
           # Add content to pull request
           gh pr comment 'learning-path'  --body "$next_step_content"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Inform user about review
+        run: |
+          message="Waiting to check your work. 🤓"
+          gh pr comment 'learning-path' --body "$message"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

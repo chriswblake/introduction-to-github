@@ -46,6 +46,14 @@ jobs:
             exit 1 
           fi
 
+      - name: Success message
+        run: |
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 3!"
+          echo "$message"
+          gh pr comment 'learning-path' --body "$message" --edit-last
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   post_step_3_content:
     name: Post step 3 content
     needs: check_step_2_work
@@ -75,6 +83,13 @@ jobs:
           
           # Add content to pull request
           gh pr comment 'learning-path'  --body "$next_step_content"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Inform user about review
+        run: |
+          message="Waiting to check your work. 🤓"
+          gh pr comment 'learning-path' --body "$message"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

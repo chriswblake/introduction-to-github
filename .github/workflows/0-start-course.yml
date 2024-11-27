@@ -105,6 +105,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Inform user about review
+        run: |
+          message="Waiting to check your work. 🤓"
+          gh pr comment 'learning-path' --body "$message"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Disable current lesson and start next one.
         run: gh workflow disable "${{github.workflow}}"
         env:

@@ -1,6 +1,6 @@
 # Introduction to GitHub
 
-![](../../actions/workflows/0-start-course.yml/badge.svg?branch=main)
+<!-- ![](../../actions/workflows/0-start-course.yml/badge.svg?branch=main) -->
 ![](../../actions/workflows/1-create-a-branch.yml/badge.svg?branch=my-first-branch)
 ![](../../actions/workflows/2-commit-a-file.yml/badge.svg?branch=my-first-branch)
 ![](../../actions/workflows/3-open-a-pull-request.yml/badge.svg?branch=my-first-branch)

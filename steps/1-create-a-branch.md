@@ -44,7 +44,7 @@ GitHub shows your profile README at the top of your profile page. For more infor
    The branch will automatically switch to the one you just created.
    The **main** branch drop-down menu will display your new branch name.
 
-6. Upon creating the branch, our bot started checking your work. After a moment, you will see the response as a comment.
+6. Wait a moment for the bot to check your work. You will see a comment with progress info and the next lesson.
 
 <details>
 <summary>Having trouble? 🤷</summary><br/>

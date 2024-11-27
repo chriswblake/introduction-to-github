@@ -35,7 +35,7 @@ The following steps will guide you through the process of committing a change on
 
 6. In this lesson, we'll ignore the other fields and click **Commit changes**.
 
-6. Upon creating the branch, our bot started checking your work. After a moment, you will see the response as a comment.
+7. Wait a moment for the bot to check your work. You will see a comment with progress info and the next lesson.
 
 <details>
 <summary>Having trouble? 🤷</summary><br/>
