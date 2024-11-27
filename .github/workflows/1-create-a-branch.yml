@@ -1,0 +1,83 @@
+name: Step 1 # Create a branch
+
+# Checks if the learner completed tasks for step 1.
+# - Triggers when the user creates a new branch 'my-first-branch'.
+# - Checks that the branch name is 'my-first-branch'.
+# - If all checks pass, the workflow is disabled so it doesn't run again. As such, workflow status badge will change to green.
+
+on:
+  push:
+    branches:
+      - '!main'
+      - 'my-first-branch'
+
+permissions:
+  contents: read
+  actions: write
+  pull-requests: write
+
+jobs:
+  check_step_1_work:
+    name: Check step 1 work
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Inform user about review
+        run: |
+          message="Looks like you are making progress. Checking your work... 🧐"
+          gh pr comment 'learning-path' --body "$message"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Success message
+        run: |
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉"
+          echo "$message"
+          gh pr comment 'learning-path' --body "$message" --edit-last
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  post_step_2_content:
+    needs: check_step_1_work
+    name: Post step 2 content
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Add pull request comment with step 1 content
+        run: |
+          # Load step 1 content
+          next_step_content=$(cat steps/2-commit-a-file.md)
+          
+          # Update image links to be absolute
+          target='steps/'
+          replacement='https://github.com/${{ github.repository }}/blob/main/steps/'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Append "?raw=true" to image links
+          target='.png'
+          replacement='.png?raw=true'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Add content to pull request
+          gh pr comment 'learning-path'  --body "$next_step_content"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable workflow to prevent running again
+        run: gh workflow disable "${{github.workflow}}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
