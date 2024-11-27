@@ -64,11 +64,6 @@ jobs:
           gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Disable workflow so it doesn't run again
-        run: gh workflow disable "${{github.workflow}}" --repo ${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   post_step_4_content:
     name: Post step 4 content
