@@ -34,7 +34,7 @@ To create a pull request automatically, click **Compare & pull request**, and th
 <details>
 <summary>Having trouble? 🤷</summary><br/>
 
-If the badge doesn't turn green, here are some things to check:
+If you don't get feedback, here are some things to check:
 - Make sure your pull request title is correct.
 - Ensure your pull request has a description.
 
