@@ -14,6 +14,8 @@ jobs:
   start_course:
     name: Start Course
     runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template
 
     steps:
       - name: Checkout
@@ -26,6 +28,18 @@ jobs:
         run: |
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
+
+      - name: Deactivate 'Start Course' button
+        run: | 
+          # Remove href from 'Start Course' button
+          target='id="copy-course"[^>]*href="[^"]*"'
+          replacement='id="copy-course"'
+          sed -i "s|$target|$replacement|g" README.md
+
+          # Change color from green to gray
+          target=Copy_Course-008000
+          replacement=Copy_Course-AAA
+          sed -i "s|$target|$replacement|g" README.md
 
       - name: Activate 'Start Lesson' button
         run: |
@@ -54,6 +68,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create branch for learning path
+        if: false
         run: |
           git checkout -b learning-path
           git commit --allow-empty -m "Start course"
@@ -62,9 +77,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pull request
+        if: false
         run: |
           gh pr create --base main --head learning-path \
           --title "Introduction to GitHub" \
           --body "Welcome to the course! As you complete each step, our bot will post comments to unlock the next one. Good luck!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add pull request comment with step 1 content
+        run: |
+          # Load step 1 content
+          next_step_content=$(cat steps/1-create-a-branch.md)
+          
+          # Update image links to be absolute
+          target='steps/'
+          replacement='https://github.com/${{ github.repository }}/blob/main/steps/'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Append "?raw=true" to image links
+          target='.png'
+          replacement='.png?raw=true'
+          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
+          
+          # Add content to pull request
+          gh pr comment 'learning-path' --body "$next_step_content"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable current lesson and start next one.
+        run: gh workflow disable "${{github.workflow}}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
