@@ -67,6 +67,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  post_step_1_content:
+    name: Post step 1 content
+    # needs: start_course
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+            ref: main
+            fetch-depth: 0
+
+      - name: Configure Git user
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          
       - name: Create branch for learning path
         run: |
           git checkout -b learning-path
