@@ -37,6 +37,10 @@ jobs:
     name: Post review content
     needs: check_step_4_work
     runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template &&
+      github.head_ref == 'my-first-branch' &&
+      github.event.pull_request.merged == true
     
     steps:
       - name: Checkout
