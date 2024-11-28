@@ -37,8 +37,13 @@ In this course, you will:
    - For owner, choose your personal account or an organization to host the repository.
    - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
    - Scroll down and click the **Create repository** button at the bottom of the form.
-3. After your new repository is created, click **Start Lesson**. Follow the step-by-step instructions and feedback will be provided as you progress.
 
+3. After your new repository is created, wait about 20 seconds for the course to be prepared. 
+   - The **Copy Course** button will deactivate, changing to gray.
+   - The **Start Lesson** button will activate, changing to green.
+
+4. Click **Start Lesson**. Follow the step-by-step instructions and feedback will be provided as you progress.
+   
    <a id="start_lesson">
       <img src="https://img.shields.io/badge/🚀_Start_Lesson-AAA" height="25pt"/>
    </a>
