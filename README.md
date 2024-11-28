@@ -29,7 +29,7 @@ In this course, you will:
 
 1. Right-click **Copy Course** and open the link in a new tab.
    
-   <a id="copy-course" href="https://github.com/new?template_owner=skills&template_name=introduction-to-github&owner=%40me&name=skills-introduction-to-github&description=My+clone+repository&visibility=public">
+   <a id="copy-course" href="https://github.com/new?template_owner=chriswblake&template_name=introduction-to-github-v2.1&owner=%40me&name=skills-introduction-to-github&description=My+clone+repository&visibility=public">
       <img src="https://img.shields.io/badge/📠_Copy_Course-008000" height="25pt"/>
    </a>
 
