@@ -18,7 +18,7 @@ on:
 permissions:
   contents: read
   actions: write
-  pull-requests: write
+  issues: write
 
 jobs:
   check_step_3_work:
@@ -32,7 +32,7 @@ jobs:
       - name: Congratulate first PR
         run: |
           message="You've created your first pull request. Nice work! ✨🎉 Now, let's check the title and description."
-          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }} --edit-last
+          gh issue comment 1 --body "$message" --repo ${{ github.repository }} --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
@@ -52,7 +52,7 @@ jobs:
           # If messsage is not empty post feedback
           if [ ! -z "$message" ]; then
             message="Please check:$message"
-            gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }} --edit-last
+            gh issue comment 1 --body "$message" --repo ${{ github.repository }} --edit-last
             exit 1
           fi
         env:
@@ -61,7 +61,7 @@ jobs:
       - name: Mark lesson finished
         run: |
           message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 4! Almost done!"
-          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }}
+          gh issue comment 1 --body "$message" --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
@@ -77,7 +77,7 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Add pull request comment with step 4 content
+      - name: Add issue comment with step 4 content
         run: |
           # Load step 4 content
           next_step_content=$(cat steps/4-merge-your-pull-request.md)
@@ -92,15 +92,15 @@ jobs:
           replacement='.png?raw=true'
           next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
           
-          # Add content to pull request
-          gh pr comment 'learning-path'  --body "$next_step_content"
+          # Add content to issue
+          gh issue comment 1  --body "$next_step_content"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Inform user about review
         run: |
           message="Waiting to check your work. 🤓"
-          gh pr comment 'learning-path' --body "$message"
+          gh issue comment 1 --body "$message"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -12,9 +12,9 @@ on:
       - closed
 
 permissions:
-  actions: write
-  pull-requests: write
   contents: write
+  actions: write
+  issues: write
 
 jobs:
   check_step_4_work:
@@ -29,7 +29,7 @@ jobs:
       - name: Mark lesson finished
         run: |
           message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Now, let's do a quick review!"
-          gh pr comment 'learning-path' --body "$message" --repo ${{ github.repository }}
+          gh issue comment 1 --body "$message" --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Add pull request comment with review content
+      - name: Add issue comment with review content
         run: |
           # Load review content
           next_step_content=$(cat steps/x-review.md)
@@ -60,8 +60,8 @@ jobs:
           replacement='.png?raw=true'
           next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
           
-          # Add content to pull request
-          gh pr comment 'learning-path'  --body "$next_step_content"
+          # Add content to issue
+          gh issue comment 1  --body "$next_step_content"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -101,7 +101,7 @@ jobs:
       - name: Final message
         run: |
           message="Return to the [repository home](https://github.com/${{ github.repository }}) page to see your progress!"
-          gh pr comment 'learning-path' --body "$message"
+          gh issue comment 1 --body "$message"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

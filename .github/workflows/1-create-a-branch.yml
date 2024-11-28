@@ -14,7 +14,7 @@ on:
 permissions:
   contents: read
   actions: write
-  pull-requests: write
+  issues: write
 
 jobs:
   check_step_1_work:
@@ -33,7 +33,7 @@ jobs:
       - name: Inform user review has started
         run: |
           message="Looks like you are making progress. Checking your work... 🧐"
-          gh pr comment 'learning-path' --body "$message" --edit-last
+          gh issue comment 1 --body "$message" --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -41,7 +41,7 @@ jobs:
         run: |
           message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 2!"
           echo "$message"
-          gh pr comment 'learning-path' --body "$message" --edit-last
+          gh issue comment 1 --body "$message" --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -57,7 +57,7 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Add pull request comment with step 1 content
+      - name: Add issue comment with step 1 content
         run: |
           # Load step 1 content
           next_step_content=$(cat steps/2-commit-a-file.md)
@@ -72,15 +72,15 @@ jobs:
           replacement='.png?raw=true'
           next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
           
-          # Add content to pull request
-          gh pr comment 'learning-path'  --body "$next_step_content"
+          # Add content to issue
+          gh issue comment 1 --body "$next_step_content"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Inform user about review
         run: |
           message="Waiting to check your work. 🤓"
-          gh pr comment 'learning-path' --body "$message"
+          gh issue comment 1 --body "$message"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
