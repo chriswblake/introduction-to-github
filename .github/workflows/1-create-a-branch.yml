@@ -39,7 +39,7 @@ jobs:
       
       - name: Success message
         run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 2!"
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Preparing step 2! One moment."
           echo "$message"
           gh issue comment 1 --body "$message" --edit-last
         env:

@@ -60,7 +60,7 @@ jobs:
               
       - name: Mark lesson finished
         run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 On to step 4! Almost done!"
+          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Preparing step 4! One moment. Almost done!"
           gh issue comment 1 --body "$message" --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
