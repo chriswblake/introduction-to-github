@@ -31,19 +31,22 @@ jobs:
           ref: main
 
       - name: Inform user review has started
-        run: |
-          message="Looks like you are making progress. Checking your work... 🧐"
-          gh issue comment 1 --body "$message" --edit-last
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'checking'
+          update-recent: true
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Success message
-        run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Preparing step 2! One moment."
-          echo "$message"
-          gh issue comment 1 --body "$message" --edit-last
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'step-passed-preparing-next-step'
+          update-recent: true
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
   post_step_2_content:
     name: Post step 2 content
@@ -78,11 +81,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Inform user about review
-        run: |
-          message="Waiting to check your work. 🤓"
-          gh issue comment 1 --body "$message"
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'ready-waiting-to-check'
+          update-recent: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Disable workflow to prevent running again
         run: gh workflow disable "${{github.workflow}}"

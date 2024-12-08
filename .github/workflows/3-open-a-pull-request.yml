@@ -57,13 +57,15 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              
-      - name: Mark lesson finished
-        run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Preparing step 4! One moment. Almost done!"
-          gh issue comment 1 --body "$message" --repo ${{ github.repository }}
+
+      - name: Success message
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'step-passed-preparing-next-step'
+          update-recent: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   post_step_4_content:
     name: Post step 4 content
@@ -98,11 +100,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Inform user about review
-        run: |
-          message="Waiting to check your work. 🤓"
-          gh issue comment 1 --body "$message"
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'ready-waiting-to-check'
+          update-recent: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Disable workflow to prevent running again
         run: gh workflow disable "${{github.workflow}}"

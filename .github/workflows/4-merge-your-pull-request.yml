@@ -27,11 +27,13 @@ jobs:
 
     steps:
       - name: Mark lesson finished
-        run: |
-          message="🎉🎉🎉  Nice work! Everything is perfect! 🎉🎉🎉 Now, let's do a quick review!"
-          gh issue comment 1 --body "$message" --repo ${{ github.repository }}
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'lets-review'
+          update-recent: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   post_review_content:
     name: Post review content
@@ -103,11 +105,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Final message
-        run: |
-          message="Return to the [repository home](https://github.com/${{ github.repository }}) page to see your progress!"
-          gh issue comment 1 --body "$message"
+        uses: chriswblake/action-add-skill-feedback@develop
+        with:
+          issue-number: 1
+          premade-comment-name: 'congratulations'
+          update-recent: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Disable workflow to prevent running again
         run: gh workflow disable "${{github.workflow}}"
