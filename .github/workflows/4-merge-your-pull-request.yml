@@ -31,7 +31,7 @@ jobs:
         with:
           issue-number: 1
           comment-template: 'lesson-review'
-          update-recent: false
+          update-recent: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
