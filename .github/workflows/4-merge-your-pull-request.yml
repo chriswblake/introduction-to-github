@@ -111,7 +111,7 @@ jobs:
           comment-template: 'lesson-finished'
           comment-template-vars: '{
             "login": "${{ github.actor }}",
-            "repo_full_name": "${{ github.repository.full_name }}"
+            "repo_full_name": "${{ github.repository }}"
           }'
           update-recent: false
         env:
