@@ -118,7 +118,7 @@ jobs:
         uses: chriswblake/action-add-skill-feedback@develop
         with:
           issue-number: 1
-          premade-comment-name: 'ready-waiting-to-check'
+          comment-template: 'watching-for-progress'
           update-recent: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

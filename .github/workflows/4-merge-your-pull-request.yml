@@ -30,7 +30,7 @@ jobs:
         uses: chriswblake/action-add-skill-feedback@develop
         with:
           issue-number: 1
-          premade-comment-name: 'lets-review'
+          comment-template: 'lesson-review'
           update-recent: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -108,7 +108,11 @@ jobs:
         uses: chriswblake/action-add-skill-feedback@develop
         with:
           issue-number: 1
-          premade-comment-name: 'congratulations'
+          comment-template: 'lesson-finished'
+          comment-template-vars: '{
+            "login": "${{ github.actor }}",
+            "repo_full_name": "${{ github.repository.full_name }}"
+          }'
           update-recent: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -62,7 +62,10 @@ jobs:
         uses: chriswblake/action-add-skill-feedback@develop
         with:
           issue-number: 1
-          premade-comment-name: 'step-passed-preparing-next-step'
+          comment-template: 'step-finished-prepare-next-step'
+          comment-template-vars: '{
+            "next_step_number": "4"
+          }'
           update-recent: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -103,7 +106,7 @@ jobs:
         uses: chriswblake/action-add-skill-feedback@develop
         with:
           issue-number: 1
-          premade-comment-name: 'ready-waiting-to-check'
+          comment-template: 'watching-for-progress'
           update-recent: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
