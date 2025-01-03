@@ -49,7 +49,7 @@ In this course, you will:
    </a>
 
 > [!IMPORTANT]
-> The **Start Lesson** button will activate after copying the course.
+> The **Start Lesson** button will activate after copying the course. You will probably need to refresh the page.
 
 ---
 
