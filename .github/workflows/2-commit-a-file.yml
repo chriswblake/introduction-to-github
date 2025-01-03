@@ -16,8 +16,6 @@ permissions:
   contents: read
   actions: write
   issues: write
-env:
-  ISSUE_URL: "https://github.com/chriswblake/temp/issues/6"
 
 jobs:
   find_lesson:
@@ -32,7 +30,7 @@ jobs:
     steps:
       - id: get-issue-url-by-title
         run: |
-          issue_url=$(gh issue list --repo chriswblake/temp --search "in:title Lesson:" --json url,title --jq '.[].url')
+          issue_url=$(gh issue list --search "in:title Course:" --json url,title --jq '.[].url')
           echo "ISSUE_URL=$issue_url" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

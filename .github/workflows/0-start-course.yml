@@ -122,7 +122,6 @@ jobs:
         id: create-issue
         run: |
           issue_url=$(gh issue create \
-            --repo chriswblake/temp \
             --title "Course: $COURSE_NAME" \
             --body "${{ steps.build-issue-description.outputs.updated-text }}")
           echo "ISSUE_URL=$issue_url" >> "$GITHUB_ENV"
