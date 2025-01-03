@@ -16,29 +16,53 @@ permissions:
   contents: read
   actions: write
   issues: write
-
+env:
+  ISSUE_URL: "https://github.com/chriswblake/temp/issues/6"
 
 jobs:
-  check_step_2_work:
-    name: Check step 2 work
+  find_lesson:
+    name: Find lesson by issue title
     runs-on: ubuntu-latest
     if: |
       !github.event.repository.is_template
 
+    outputs:
+      issue-url: ${{ steps.get-issue-url-by-title.outputs.ISSUE_URL }}
+
+    steps:
+      - id: get-issue-url-by-title
+        run: |
+          issue_url=$(gh issue list --repo chriswblake/temp --search "in:title Lesson:" --json url,title --jq '.[].url')
+          echo "ISSUE_URL=$issue_url" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  check_step_work:
+    name: Check step work
+    runs-on: ubuntu-latest
+    needs: find_lesson
+    if: |
+      !github.event.repository.is_template
+    env:
+      ISSUE_URL: ${{ needs.find_lesson.outputs.issue-url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Inform user review has started
-        uses: chriswblake/action-add-skill-feedback@develop
+      - name: Get response templates
+        uses: actions/checkout@v4
         with:
-          issue-number: 1
-          comment-template: 'checking-work'
-          update-recent: true
+          repository: chriswblake/skills-response-templates
+          path: skills-response-templates
+
+      - name: Update comment - checking work
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file skills-response-templates/step-feedback/checking-work.md \
+            --edit-last
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check contents of 'PROFILE.md'
         run: |
@@ -48,58 +72,52 @@ jobs:
             exit 1 
           fi
 
-      - name: Success message
-        uses: chriswblake/action-add-skill-feedback@develop
+      - name: Build message - step finished
+        id: build-message-step-finish
+        uses: chriswblake/action-text-variables@v1
         with:
-          issue-number: 1
-          comment-template: 'step-finished-prepare-next-step'
-          comment-template-vars: '{
-            "next_step_number": "3"
-          }'
-          update-recent: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          template-file: skills-response-templates/step-feedback/step-finished-prepare-next-step.md
+          template-vars: |
+            next_step_number=3
 
-  post_step_3_content:
-    name: Post step 3 content
-    needs: check_step_2_work
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Add issue comment with step 3 content
+      - name: Update comment - step finished
         run: |
-          # Load step 3 content
-          next_step_content=$(cat steps/3-open-a-pull-request.md)
-          
-          # Update image links to be absolute
-          target='steps/'
-          replacement='https://github.com/${{ github.repository }}/blob/main/steps/'
-          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
-          
-          # Append "?raw=true" to image links
-          target='.png'
-          replacement='.png?raw=true'
-          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
-          
-          # Add content to issue
-          gh issue comment 1  --body "$next_step_content"
+          gh issue comment "$ISSUE_URL" \
+            --body "${{ steps.build-message-step-finish.outputs.updated-text }}" \
+            --edit-last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Inform user about review
-        uses: chriswblake/action-add-skill-feedback@develop
+  post_next_step_content:
+    name: Post next step content
+    needs: [find_lesson, check_step_work]
+    runs-on: ubuntu-latest
+    env:
+      ISSUE_URL: ${{ needs.find_lesson.outputs.issue-url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get response templates
+        uses: actions/checkout@v4
         with:
-          issue-number: 1
-          comment-template: 'watching-for-progress'
-          update-recent: false
+          repository: chriswblake/skills-response-templates
+          path: skills-response-templates
+
+      - name: Create comment - add step content
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file steps/3-open-a-pull-request.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create comment - watching for progress
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file skills-response-templates/step-feedback/watching-for-progress.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Disable workflow to prevent running again
         run: gh workflow disable "${{github.workflow}}"
