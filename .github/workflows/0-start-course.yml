@@ -10,7 +10,30 @@ permissions:
   actions: write
   issues: write
 
+env:
+  COURSE_NAME: "Introduction to GitHub"
+
 jobs:
+  disable_workflows:
+    name: Disable workflows
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.repository.is_template
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Disable all workflows
+        run: |
+          workflows=$(git ls-files | grep -E '\.yml$|\.yaml$')
+          for workflow in $workflows; do
+            workflow_name=$(basename $workflow)
+            gh workflow disable "$workflow_name"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   start_course:
     name: Start Course
     runs-on: ubuntu-latest
@@ -20,9 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-            ref: main
-            fetch-depth: 0
 
       - name: Configure Git user
         run: |
@@ -30,7 +50,7 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
 
       - name: Deactivate 'Start Course' button
-        run: | 
+        run: |
           # Remove href from 'Start Course' button
           target='id="copy-course"[^>]*href="[^"]*"'
           replacement='id="copy-course"'
@@ -65,65 +85,67 @@ jobs:
           git commit --message="Start course"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  post_step_1_content:
-    name: Post step 1 content
+  post_next_step_content:
+    name: Post next step content
     runs-on: ubuntu-latest
     if: |
       !github.event.repository.is_template
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Get response templates
+        uses: actions/checkout@v4
         with:
-            ref: main
-            fetch-depth: 0
+          repository: chriswblake/skills-response-templates
+          path: skills-response-templates
 
       - name: Configure Git user
         run: |
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
 
-      - name: Create new issue for learning
-        run: |
-          gh issue create \
-          --title "Introduction to GitHub" \
-          --body "Welcome to your learning course!
-          As you complete each step, our bot will post comments, check your work, and share the next steps. Good luck!"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add issue comment with step 1 content
-        run: |
-          # Load step 1 content
-          next_step_content=$(cat steps/1-create-a-branch.md)
-          
-          # Update image links to be absolute
-          target='steps/'
-          replacement='https://github.com/${{ github.repository }}/blob/main/steps/'
-          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
-          
-          # Append "?raw=true" to image links
-          target='.png'
-          replacement='.png?raw=true'
-          next_step_content=$(echo "$next_step_content" | sed "s|$target|$replacement|g")
-          
-          # Add content to issue
-          gh issue comment 1 --body "$next_step_content"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Inform user about review
-        uses: chriswblake/action-add-skill-feedback@develop
+      - name: Build welcome message from template
+        id: build-issue-description
+        uses: chriswblake/action-text-variables@v1
         with:
-          issue-number: 1
-          comment-template: 'watching-for-progress'
-          update-recent: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          template-file: skills-response-templates/step-feedback/welcome.md
+          template-vars: |
+            title=Introduction to GitHub
+            login=${{ github.actor }}
+            intro_message=If you are new to GitHub, you might find your fellow developers use ___**issues**___  to organize their work and collaborate. We will do the same! That's another lesson, but today, we will introduce you to the basics.
 
-      - name: Disable current lesson and start next one.
-        run: gh workflow disable "${{github.workflow}}"
+      - name: Create issue - add welcome message
+        id: create-issue
+        run: |
+          issue_url=$(gh issue create \
+            --repo chriswblake/temp \
+            --title "Course: $COURSE_NAME" \
+            --body "${{ steps.build-issue-description.outputs.updated-text }}")
+          echo "ISSUE_URL=$issue_url" >> "$GITHUB_ENV"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create comment - add step content
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file steps/1-create-a-branch.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create comment - watching for progress
+        run: |
+          gh issue comment "$ISSUE_URL" \
+            --body-file skills-response-templates/step-feedback/watching-for-progress.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Disable current workflow and enable next one
+        run: |
+          gh workflow disable "Step 0"
+          gh workflow enable "Step 1"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
