@@ -10,7 +10,7 @@ Now that you have made a change to the project and created a commit, it’s time
 
 You may have noticed after your commit that a message displayed indicating your recent push to your branch and providing a button that says **Compare & pull request**.
 
-![screenshot of message and button](steps/images/3-compare-and-pull-request.png)
+![screenshot of message and button](https://github.com/user-attachments/assets/47b82c6e-d45b-4854-b8b4-1cb2c33af05f)
 
 To create a pull request automatically, click **Compare & pull request**, and then skip to step 6 below. If you don't click the button, the instructions below walk you through manually setting up the pull request.
 
@@ -19,13 +19,13 @@ To create a pull request automatically, click **Compare & pull request**, and th
 3. In the **base:** dropdown, make sure **main** is selected.
 4. In the **compare:** dropdown, select `my-first-branch`.
 
-   ![screenshot showing both branch selections](steps/images/3-pull-request-branches.png)
+   ![screenshot showing both branch selections](https://github.com/user-attachments/assets/140ca348-b6de-4c3c-b29f-fd57944d98a9)
 
 5. Click **Create pull request**.
 6. Enter a title for your pull request. By default, the title will automatically be the name of your branch. For this exercise, let's edit the field to say `Add my first file`.
 7. The next field helps you provide a description of the changes you made. Here, you can add a description of what you’ve accomplished so far. As a reminder, you have: created a new branch, created a file, and made a commit.
 
-   ![screenshot showing pull request](steps/images/3-pull-request-description.png)
+   ![screenshot showing pull request](https://github.com/user-attachments/assets/e03171f9-98cc-4067-a473-78424618f1f8)
 
 8. Click **Create pull request**. You will automatically be navigated to your new pull request.
 

@@ -8,7 +8,7 @@ You successfully created a pull request. You can now merge your pull request.
 
 As noted in the previous step, you may have seen evidence of GitHub Actions running which automatically progresses your instructions to the next step. You'll have to wait for it to finish before you can merge your pull request. It will be ready when the merge pull request button is green.
 
-![screenshot of green merge pull request button](steps/images/4-green-merge-pull-request.png)
+![screenshot of green merge pull request button](https://github.com/user-attachments/assets/ce2f04cb-8a71-411f-8dc8-827a2bc23a30)
 
 ### :keyboard: Activity: Merge the pull request
 
@@ -16,7 +16,7 @@ As noted in the previous step, you may have seen evidence of GitHub Actions runn
 2. Click **Confirm merge**.
 3. Once your branch has been merged, you don't need it anymore. To delete this branch, click **Delete branch**.
 
-   ![screenshot showing delete branch button](steps/images/4-delete-branch.png)
+   ![screenshot showing delete branch button](https://github.com/user-attachments/assets/0fda948e-14e0-4643-aa53-d9f9f364cddd)
 
 4. Wait a moment for the bot to check your work. You will see a comment with progress info and the next lesson.
 
