@@ -79,7 +79,7 @@ jobs:
       - name: Create comment - add review content
         run: |
           gh issue comment "$ISSUE_URL" \
-            --body-file steps/x-review.md
+            --body-file .github/steps/x-review.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -172,7 +172,7 @@ jobs:
       - name: Create comment - add step content
         run: |
           gh issue comment "$ISSUE_URL" \
-            --body-file steps/4-merge-your-pull-request.md
+            --body-file .github/steps/4-merge-your-pull-request.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

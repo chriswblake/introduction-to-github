@@ -106,7 +106,7 @@ jobs:
       - name: Create comment - add step content
         run: |
           gh issue comment "$ISSUE_URL" \
-            --body-file steps/3-open-a-pull-request.md
+            --body-file .github/steps/3-open-a-pull-request.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
