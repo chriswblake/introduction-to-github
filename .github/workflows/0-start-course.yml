@@ -43,9 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-            ref: main
-            fetch-depth: 0
 
       - name: Configure Git user
         run: |
@@ -53,7 +50,7 @@ jobs:
           git config user.email github-actions[bot]@users.noreply.github.com
 
       - name: Deactivate 'Start Course' button
-        run: | 
+        run: |
           # Remove href from 'Start Course' button
           target='id="copy-course"[^>]*href="[^"]*"'
           replacement='id="copy-course"'

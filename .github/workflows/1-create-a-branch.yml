@@ -8,8 +8,8 @@ name: Step 1 # Create a branch
 on:
   push:
     branches:
-      - '!main'
-      - 'my-first-branch'
+      - "!main"
+      - "my-first-branch"
 
 permissions:
   contents: read

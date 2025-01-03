@@ -8,7 +8,7 @@ name: Step 2 # Commit a file
 on:
   push:
     branches:
-      - 'my-first-branch'
+      - "my-first-branch"
     paths:
       - PROFILE.md
 
@@ -69,7 +69,7 @@ jobs:
           if ! grep -q "Welcome*" "PROFILE.md"; then
             message="Your PROFILE.md is missing the expected content. Please try again."
             gh issue comment 1 --body "$message" --edit-last
-            exit 1 
+            exit 1
           fi
 
       - name: Build message - step finished
