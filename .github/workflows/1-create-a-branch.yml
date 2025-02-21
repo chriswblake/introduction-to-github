@@ -50,7 +50,7 @@ jobs:
       - name: Get response templates
         uses: actions/checkout@v4
         with:
-          repository: chriswblake/skills-response-templates
+          repository: skills/response-templates
           path: skills-response-templates
 
       - name: Update comment - checking work
@@ -63,7 +63,7 @@ jobs:
 
       - name: Build message - step finished
         id: build-message-step-finish
-        uses: chriswblake/action-text-variables@v1
+        uses: skills/action-text-variables@v1
         with:
           template-file: skills-response-templates/step-feedback/step-finished-prepare-next-step.md
           template-vars: |
@@ -91,7 +91,7 @@ jobs:
       - name: Get response templates
         uses: actions/checkout@v4
         with:
-          repository: chriswblake/skills-response-templates
+          repository: skills/skills-response-templates
           path: skills-response-templates
 
       - name: Create comment - add step content
